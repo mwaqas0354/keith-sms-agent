@@ -9,7 +9,11 @@
   }
 
   body {
-    @apply bg-luxury-page text-luxury-800 antialiased;
+    color: #1f1b18;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(135deg, #fbf9f6 0%, #f7f3ed 40%, #fbf6ee 100%);
+    min-height: 100vh;
   }
 }
 
@@ -19,8 +23,12 @@
   }
 
   .btn-primary {
-    @apply px-4 py-2.5 bg-navy-shine hover:opacity-90 text-white rounded-xl font-medium
-      transition-all duration-200 shadow-luxury disabled:opacity-50;
+    @apply px-4 py-2.5 text-white rounded-xl font-medium transition-all duration-200 shadow-luxury disabled:opacity-50;
+    background: linear-gradient(135deg, #1E3A5F 0%, #152A45 100%);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    opacity: 0.92;
   }
 
   .btn-secondary {
@@ -41,6 +49,22 @@
 
   .page-title {
     @apply font-display text-2xl font-semibold text-luxury-900 tracking-tight;
+  }
+
+  .bg-luxury-page {
+    background: linear-gradient(135deg, #FBF9F6 0%, #F7F3ED 40%, #FBF6EE 100%);
+  }
+
+  .bg-luxury-sidebar {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F7F3ED 100%);
+  }
+
+  .bg-gold-shine {
+    background: linear-gradient(135deg, #C9A962 0%, #B8956A 50%, #9A7B4F 100%);
+  }
+
+  .bg-navy-shine {
+    background: linear-gradient(135deg, #1E3A5F 0%, #152A45 100%);
   }
 
   .text-muted {
