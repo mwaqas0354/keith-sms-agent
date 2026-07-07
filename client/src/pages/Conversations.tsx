@@ -6,7 +6,9 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { api, Conversation, Message } from '../api';
 import StatusBadge from '../components/StatusBadge';
+import StatusSelector from '../components/StatusSelector';
 import SentimentBadge from '../components/SentimentBadge';
+import type { ConversationStatus } from '../components/statusConfig';
 
 interface Props {
   refreshKey: number;
@@ -87,7 +89,7 @@ export default function Conversations({ refreshKey }: Props) {
     await refreshSelected(selected.id);
   };
 
-  const handleStatusChange = async (status: string) => {
+  const handleStatusChange = async (status: ConversationStatus) => {
     if (!selected || status === selected.status) return;
     await api.updateStatus(selected.id, status);
     await refreshSelected(selected.id);
@@ -180,16 +182,10 @@ export default function Conversations({ refreshKey }: Props) {
                 </div>
               </div>
               <div className="flex items-center gap-2 flex-wrap justify-end">
-                <select
+                <StatusSelector
                   value={selected.status}
-                  onChange={(e) => handleStatusChange(e.target.value)}
-                  className="input text-xs py-1.5 w-auto capitalize"
-                  title="Update conversation status"
-                >
-                  {['active', 'escalated', 'paused', 'won', 'lost'].map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
+                  onChange={handleStatusChange}
+                />
                 {!isClosed && (
                   <>
                     {selected.ai_enabled ? (
