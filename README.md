@@ -4,7 +4,7 @@ A full-stack AI sales automation platform that handles two-way SMS conversations
 
 ## Project Overview
 
-AI-Powered SMS Sales Agent is an intelligent SMS sales agent that engages leads via text message, qualifies opportunities, handles objections, and escalates to human agents when needed. The system includes:
+This platform is an intelligent SMS sales agent that engages leads via text message, qualifies opportunities, handles objections, and escalates to human agents when needed. The system includes:
 
 - An **AI conversation engine** powered by OpenAI (with a demo fallback when no API key is configured)
 - **Twilio SMS** integration for inbound and outbound messaging
@@ -106,7 +106,7 @@ The application runs locally in demo mode without any third-party API keys, maki
 ## Folder Structure
 
 ```
-ai-sales-agent/
+ai-sms-sales-agent/
 ├── client/                    # React frontend (Vite)
 │   ├── src/
 │   │   ├── api.ts             # REST API client
@@ -144,7 +144,7 @@ ai-sales-agent/
 
 ```bash
 git clone <repository-url>
-cd keith-ai-sales-agent
+cd ai-sms-sales-agent
 ```
 
 ### 2. Install dependencies
@@ -182,8 +182,8 @@ On first server start, a default admin account is seeded:
 
 | Field | Value |
 |-------|-------|
-| Email | `admin@keith.com` |
-| Password | `keith2024` |
+| Email | `admin@example.com` |
+| Password | `changeme123` |
 
 **Change this password immediately in production** by creating a new admin and removing the default, or updating the seed logic.
 
@@ -329,7 +329,7 @@ Base URL: `http://localhost:3001/api`
 # Login
 curl -X POST http://localhost:3001/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@keith.com","password":"keith2024"}'
+  -d '{"email":"admin@example.com","password":"changeme123"}'
 
 # Use token
 curl http://localhost:3001/api/conversations \
@@ -351,7 +351,7 @@ Connect to `ws://localhost:3001/ws`. Events include:
 
 ## Database
 
-SQLite database is auto-created at `server/data/keith.db` on first run.
+SQLite database is auto-created at `server/data/sales-agent.db` on first run.
 
 ### Schema
 
@@ -373,7 +373,7 @@ There is no formal migration framework. Schema is defined in `server/src/db/inde
 
 On first run, `server/src/db/seed.ts` creates sample leads and conversations for demo purposes. A default admin agent is seeded by `server/src/services/auth.ts`.
 
-To reset: delete `server/data/keith.db` and restart the server.
+To reset: delete `server/data/sales-agent.db` and restart the server.
 
 ---
 

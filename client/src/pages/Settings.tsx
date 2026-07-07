@@ -93,7 +93,7 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-white">Which AI platform is used?</p>
             <p className="text-slate-400 mt-1">
-              Keith uses <strong className="text-slate-300">OpenAI</strong> ({settings.integrations.aiModel || 'gpt-4o-mini'}).
+              The platform uses <strong className="text-slate-300">OpenAI</strong> ({settings.integrations.aiModel || 'gpt-4o-mini'}).
               In demo mode, smart fallback responses are used when no API key is configured.
             </p>
           </div>
@@ -108,7 +108,7 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-white">Zoho notifications during conversations?</p>
             <p className="text-slate-400 mt-1">
-              When Zoho CRM is connected, Keith adds Notes and Tasks to the lead record on conversation start,
+              When Zoho CRM is connected, the system adds Notes and Tasks to the lead record on conversation start,
               escalation, human takeover, and deal close. Toggle below. In-app alerts also appear in the dashboard bell icon.
             </p>
           </div>
@@ -166,7 +166,7 @@ export default function SettingsPage() {
           Bot Training
         </h3>
         <p className="text-sm text-slate-400">
-          Configure how Keith talks to leads. Changes apply to new AI responses immediately.
+          Configure how the AI agent talks to leads. Changes apply to new AI responses immediately.
         </p>
         <div>
           <label className="block text-sm text-slate-400 mb-1">Company Name</label>
@@ -182,7 +182,7 @@ export default function SettingsPage() {
         </div>
         <div>
           <label className="block text-sm text-slate-400 mb-1">Outreach Template (use {'{name}'} for lead name)</label>
-          <textarea className="input min-h-[60px]" value={form.bot_outreach_template} onChange={(e) => update('bot_outreach_template', e.target.value)} placeholder="Hi {name}! I'm Keith from..." />
+          <textarea className="input min-h-[60px]" value={form.bot_outreach_template} onChange={(e) => update('bot_outreach_template', e.target.value)} placeholder="Hi {name}! I'm reaching out from..." />
         </div>
       </div>
 

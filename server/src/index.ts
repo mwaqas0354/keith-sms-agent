@@ -43,7 +43,7 @@ const clients = new Set<WebSocket>();
 wss.on('connection', (ws) => {
   clients.add(ws);
   ws.on('close', () => clients.delete(ws));
-  ws.send(JSON.stringify({ event: 'connected', data: { message: 'Connected to Keith Sales Agent' } }));
+  ws.send(JSON.stringify({ event: 'connected', data: { message: 'Connected to AI Sales Agent' } }));
 });
 
 setBroadcast((event, data) => {
@@ -62,7 +62,7 @@ void (async () => {
   server.listen(PORT, () => {
     console.log(`
 ╔══════════════════════════════════════════════════╗
-║     Keith AI Sales Agent - Server Running        ║
+║     AI Sales Agent - Server Running              ║
 ╠══════════════════════════════════════════════════╣
 ║  API:       http://localhost:${PORT}/api           ║
 ║  WebSocket: ws://localhost:${PORT}/ws              ║

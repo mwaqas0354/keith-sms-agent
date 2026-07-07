@@ -1,7 +1,7 @@
 const API_BASE = '/api';
 
 function getToken(): string | null {
-  return localStorage.getItem('keith_token');
+  return localStorage.getItem('sales_agent_token');
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -15,7 +15,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
   });
   if (res.status === 401) {
-    localStorage.removeItem('keith_token');
+    localStorage.removeItem('sales_agent_token');
     window.location.reload();
     throw new Error('Session expired');
   }

@@ -29,7 +29,7 @@ export default function Login() {
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center mx-auto mb-4">
             <Bot className="w-9 h-9 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Keith AI Sales Agent</h1>
+          <h1 className="text-2xl font-bold text-white">AI Sales Agent</h1>
           <p className="text-slate-400 mt-1">Sign in to access the dashboard</p>
         </div>
 

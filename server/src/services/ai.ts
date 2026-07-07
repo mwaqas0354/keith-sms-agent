@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { getSetting } from '../db/index.js';
 
-const DEFAULT_SYSTEM_PROMPT = `You are Keith, an expert AI sales agent for a premium business solutions company. Your goals:
+const DEFAULT_SYSTEM_PROMPT = `You are an expert AI sales agent for a premium business solutions company. Your goals:
 1. Qualify leads by understanding their needs, budget, and timeline
 2. Answer product/service questions confidently and persuasively
 3. Handle objections professionally
@@ -35,7 +35,7 @@ export function getSystemPrompt(): string {
 
 const DEMO_RESPONSES: Record<string, string[]> = {
   greeting: [
-    "Hi! I'm Keith from the sales team. Thanks for your interest! What brought you to us today?",
+    "Hi! I'm from the sales team. Thanks for your interest! What brought you to us today?",
     "Hello! Great to connect. I'm here to help find the perfect solution for your business. What's your biggest challenge right now?",
   ],
   pricing: [
@@ -179,5 +179,5 @@ export function getInitialOutreachMessage(leadName: string): string {
   if (template) {
     return template.replace(/\{firstName\}/g, firstName).replace(/\{name\}/g, leadName);
   }
-  return `Hi ${firstName}! I'm Keith, your AI sales assistant. I noticed you recently showed interest in our business solutions. I'd love to help you find the perfect fit. What challenges are you looking to solve?`;
+  return `Hi ${firstName}! I'm your AI sales assistant. I noticed you recently showed interest in our business solutions. I'd love to help you find the perfect fit. What challenges are you looking to solve?`;
 }

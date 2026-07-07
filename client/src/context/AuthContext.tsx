@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [agent, setAgent] = useState<Agent | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('keith_token'));
+  const [token, setToken] = useState<string | null>(localStorage.getItem('sales_agent_token'));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => setAgent(data.agent))
       .catch(() => {
-        localStorage.removeItem('keith_token');
+        localStorage.removeItem('sales_agent_token');
         setToken(null);
       })
       .finally(() => setLoading(false));
@@ -48,13 +48,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(err.error || 'Login failed');
     }
     const data = await res.json();
-    localStorage.setItem('keith_token', data.token);
+    localStorage.setItem('sales_agent_token', data.token);
     setToken(data.token);
     setAgent(data.agent);
   };
 
   const logout = () => {
-    localStorage.removeItem('keith_token');
+    localStorage.removeItem('sales_agent_token');
     setToken(null);
     setAgent(null);
   };

@@ -208,7 +208,7 @@ export default function Conversations({ refreshKey }: Props) {
                         <Bot className="w-3 h-3 text-brand-300" />
                       )}
                       <span className="text-xs text-slate-400 capitalize">
-                        {msg.sender === 'ai' ? 'Keith AI' : msg.sender === 'human' ? (selected.assigned_agent || agent?.name || 'Agent') : msg.sender}
+                        {msg.sender === 'ai' ? 'AI Agent' : msg.sender === 'human' ? (selected.assigned_agent || agent?.name || 'Agent') : msg.sender}
                       </span>
                       <span className="text-xs text-slate-600">
                         {new Date(msg.created_at + 'Z').toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

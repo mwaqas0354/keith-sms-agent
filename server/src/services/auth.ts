@@ -11,7 +11,7 @@ export interface Agent {
   created_at: string;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'keith-demo-secret-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-jwt-secret-change-in-production';
 const JWT_EXPIRES = '7d';
 
 export function getAgentByEmail(email: string): (Agent & { password_hash: string }) | undefined {
@@ -65,6 +65,6 @@ export function verifyToken(token: string): Agent | null {
 export async function seedDefaultAgent() {
   const count = db.prepare('SELECT COUNT(*) as c FROM agents').get() as { c: number };
   if (count.c > 0) return;
-  await createAgent('admin@keith.com', 'Admin', 'keith2024', 'admin');
+  await createAgent('admin@example.com', 'Admin', 'changeme123', 'admin');
   console.log('Default admin agent seeded (see README for first-login credentials).');
 }
