@@ -110,6 +110,10 @@ export const api = {
   resumeAI: (id: string) => request(`/conversations/${id}/resume`, { method: 'POST' }),
   closeConversation: (id: string, outcome: 'won' | 'lost') =>
     request(`/conversations/${id}/close`, { method: 'POST', body: JSON.stringify({ outcome }) }),
+  reopenConversation: (id: string) =>
+    request(`/conversations/${id}/reopen`, { method: 'POST' }),
+  updateStatus: (id: string, status: string) =>
+    request(`/conversations/${id}/status`, { method: 'POST', body: JSON.stringify({ status }) }),
   getAnalytics: () => request<Analytics>('/analytics'),
   getSettings: () => request<Settings>('/settings'),
   updateSettings: (settings: Record<string, string>) =>

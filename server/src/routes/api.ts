@@ -17,6 +17,8 @@ import {
   resumeAI,
   closeConversation,
   triggerNewLeadOutreach,
+  reopenConversation,
+  updateConversationStatus,
 } from '../services/conversation.js';
 import { getSetting, setSetting } from '../db/index.js';
 import { isTwilioConfigured } from '../services/twilio.js';
@@ -144,11 +146,34 @@ router.post('/conversations/:id/resume', async (req, res) => {
 
 router.post('/conversations/:id/close', async (req, res) => {
   try {
+    const id = String(req.params.id);
     const { outcome } = req.body;
     if (!['won', 'lost'].includes(outcome)) {
       return res.status(400).json({ error: 'Outcome must be won or lost' });
     }
-    await closeConversation(req.params.id, outcome);
+    await closeConversation(id, outcome);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Failed' });
+  }
+});
+
+router.post('/conversations/:id/reopen', async (req, res) => {
+  try {
+    await reopenConversation(String(req.params.id));
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Failed' });
+  }
+});
+
+router.post('/conversations/:id/status', async (req: AuthRequest, res) => {
+  try {
+    const id = String(req.params.id);
+    const { status } = req.body;
+    if (!status) return res.status(400).json({ error: 'status required' });
+    const agentName = req.agent?.name || 'Agent';
+    await updateConversationStatus(id, status, agentName);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : 'Failed' });

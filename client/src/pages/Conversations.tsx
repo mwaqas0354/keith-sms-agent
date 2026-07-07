@@ -44,13 +44,19 @@ export default function Conversations({ refreshKey }: Props) {
     api.getConversation(id).then(setSelected);
   };
 
+  const refreshSelected = async (id: string) => {
+    const updated = await api.getConversation(id);
+    setSelected(updated);
+    const convos = await api.getConversations();
+    setConversations(convos);
+  };
+
   const handleReply = async () => {
     if (!selected || !reply.trim()) return;
     setSending(true);
     try {
       await api.reply(selected.id, reply);
-      const updated = await api.getConversation(selected.id);
-      setSelected(updated);
+      await refreshSelected(selected.id);
       setReply('');
     } finally {
       setSending(false);
@@ -60,27 +66,34 @@ export default function Conversations({ refreshKey }: Props) {
   const handlePause = async () => {
     if (!selected) return;
     await api.pauseAI(selected.id);
-    const updated = await api.getConversation(selected.id);
-    setSelected(updated);
+    await refreshSelected(selected.id);
   };
 
   const handleResume = async () => {
     if (!selected) return;
     await api.resumeAI(selected.id);
-    const updated = await api.getConversation(selected.id);
-    setSelected(updated);
+    await refreshSelected(selected.id);
   };
 
   const handleClose = async (outcome: 'won' | 'lost') => {
     if (!selected) return;
     await api.closeConversation(selected.id, outcome);
-    const updated = await api.getConversation(selected.id);
-    setSelected(updated);
-    const convos = await api.getConversations();
-    setConversations(convos);
+    await refreshSelected(selected.id);
   };
 
-  const filterOptions = ['all', 'active', 'escalated', 'paused', 'won'] as const;
+  const handleReopen = async () => {
+    if (!selected) return;
+    await api.reopenConversation(selected.id);
+    await refreshSelected(selected.id);
+  };
+
+  const handleStatusChange = async (status: string) => {
+    if (!selected || status === selected.status) return;
+    await api.updateStatus(selected.id, status);
+    await refreshSelected(selected.id);
+  };
+
+  const filterOptions = ['all', 'active', 'escalated', 'paused', 'won', 'lost'] as const;
 
   const filterCounts = filterOptions.reduce((acc, f) => {
     acc[f] = f === 'all' ? conversations.length : conversations.filter((c) => c.status === f).length;
@@ -91,6 +104,8 @@ export default function Conversations({ refreshKey }: Props) {
     if (filter === 'all') return true;
     return c.status === filter;
   });
+
+  const isClosed = selected?.status === 'won' || selected?.status === 'lost';
 
   if (loading) {
     return (
@@ -164,19 +179,28 @@ export default function Conversations({ refreshKey }: Props) {
                   {selected.lead_company && <span>{selected.lead_company}</span>}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <StatusBadge status={selected.status} />
-                {selected.ai_enabled ? (
-                  <button onClick={handlePause} className="btn-secondary text-xs flex items-center gap-1.5 py-1.5">
-                    <Pause className="w-3.5 h-3.5" /> Take Over
-                  </button>
-                ) : selected.status !== 'won' && selected.status !== 'lost' ? (
-                  <button onClick={handleResume} className="btn-primary text-xs flex items-center gap-1.5 py-1.5">
-                    <Play className="w-3.5 h-3.5" /> Resume AI
-                  </button>
-                ) : null}
-                {selected.status !== 'won' && selected.status !== 'lost' && (
+              <div className="flex items-center gap-2 flex-wrap justify-end">
+                <select
+                  value={selected.status}
+                  onChange={(e) => handleStatusChange(e.target.value)}
+                  className="input text-xs py-1.5 w-auto capitalize"
+                  title="Update conversation status"
+                >
+                  {['active', 'escalated', 'paused', 'won', 'lost'].map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                {!isClosed && (
                   <>
+                    {selected.ai_enabled ? (
+                      <button onClick={handlePause} className="btn-secondary text-xs flex items-center gap-1.5 py-1.5">
+                        <Pause className="w-3.5 h-3.5" /> Take Over
+                      </button>
+                    ) : (
+                      <button onClick={handleResume} className="btn-primary text-xs flex items-center gap-1.5 py-1.5">
+                        <Play className="w-3.5 h-3.5" /> Resume AI
+                      </button>
+                    )}
                     <button onClick={() => handleClose('won')} className="btn-primary text-xs flex items-center gap-1.5 py-1.5 bg-emerald-600 hover:bg-emerald-500">
                       <Trophy className="w-3.5 h-3.5" /> Won
                     </button>
@@ -231,31 +255,45 @@ export default function Conversations({ refreshKey }: Props) {
               <div ref={messagesEndRef} />
             </div>
 
-            {selected.status !== 'won' && selected.status !== 'lost' && (
-              <div className="p-4 border-t border-slate-800">
-                <div className="flex gap-2">
-                  <input
-                    className="input flex-1"
-                    placeholder={selected.ai_enabled ? 'Take over to reply manually...' : 'Type your reply...'}
-                    value={reply}
-                    onChange={(e) => setReply(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleReply()}
-                    disabled={!!selected.ai_enabled}
-                  />
-                  <button
-                    onClick={handleReply}
-                    disabled={!reply.trim() || sending || !!selected.ai_enabled}
-                    className="btn-primary flex items-center gap-2"
-                  >
-                    <Send className="w-4 h-4" />
-                    Send
+            <div className="p-4 border-t border-slate-800">
+              {isClosed ? (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <p className="text-sm text-slate-400">
+                    This conversation is closed as <span className="capitalize font-medium text-slate-300">{selected.status}</span>.
+                    Reopen it to send messages or change status above.
+                  </p>
+                  <button onClick={handleReopen} className="btn-primary text-sm shrink-0">
+                    Reopen Conversation
                   </button>
                 </div>
-                {selected.ai_enabled && (
-                  <p className="text-xs text-slate-500 mt-2">Click "Take Over" to pause AI and reply manually</p>
-                )}
-              </div>
-            )}
+              ) : (
+                <>
+                  <div className="flex gap-2">
+                    <input
+                      className="input flex-1"
+                      placeholder={selected.ai_enabled ? 'Take over to reply manually...' : 'Type your reply...'}
+                      value={reply}
+                      onChange={(e) => setReply(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleReply()}
+                      disabled={!!selected.ai_enabled}
+                    />
+                    <button
+                      onClick={handleReply}
+                      disabled={!reply.trim() || sending || !!selected.ai_enabled}
+                      className="btn-primary flex items-center gap-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      Send
+                    </button>
+                  </div>
+                  {selected.ai_enabled ? (
+                    <p className="text-xs text-slate-500 mt-2">Click &quot;Take Over&quot; to pause AI and reply manually</p>
+                  ) : (
+                    <p className="text-xs text-slate-500 mt-2">Chat is active — type a message and press Send</p>
+                  )}
+                </>
+              )}
+            </div>
           </>
         )}
       </div>

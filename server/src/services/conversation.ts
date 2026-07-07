@@ -191,6 +191,60 @@ export async function closeConversation(conversationId: string, outcome: 'won' |
   broadcast('conversation_updated', { conversationId });
 }
 
+export async function reopenConversation(conversationId: string) {
+  const conversation = getConversationById(conversationId);
+  if (!conversation) throw new Error('Conversation not found');
+
+  updateConversation(conversationId, {
+    status: 'active',
+    ai_enabled: 1,
+    closed_at: null,
+    assigned_agent: null,
+    escalation_reason: null,
+    deal_stage: 'qualifying',
+  });
+
+  logEvent('conversation_reopened', conversationId, conversation.lead_id);
+  broadcast('conversation_updated', { conversationId });
+}
+
+export async function updateConversationStatus(
+  conversationId: string,
+  status: string,
+  agentName = 'Agent'
+) {
+  const allowed = ['active', 'escalated', 'paused', 'won', 'lost'];
+  if (!allowed.includes(status)) throw new Error('Invalid status');
+
+  if (status === 'won' || status === 'lost') {
+    await closeConversation(conversationId, status);
+    return;
+  }
+
+  if (status === 'active') {
+    await reopenConversation(conversationId);
+    return;
+  }
+
+  if (status === 'paused') {
+    await pauseAI(conversationId, agentName);
+    return;
+  }
+
+  const conversation = getConversationById(conversationId);
+  if (!conversation) throw new Error('Conversation not found');
+
+  updateConversation(conversationId, {
+    status: 'escalated',
+    ai_enabled: 0,
+    escalation_reason: conversation.escalation_reason || 'Manually escalated',
+    closed_at: null,
+  });
+
+  logEvent('escalation', conversationId, conversation.lead_id, { reason: 'Manually escalated' });
+  broadcast('conversation_updated', { conversationId });
+}
+
 export async function triggerNewLeadOutreach(
   name: string,
   phone: string,
