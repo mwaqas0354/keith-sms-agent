@@ -32,16 +32,16 @@ function AppShell() {
   const { connected } = useWebSocket(handleWSEvent);
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0">
-        <div className="p-5 border-b border-slate-800">
+    <div className="flex h-screen overflow-hidden bg-luxury-page">
+      <aside className="w-64 bg-luxury-sidebar border-r border-luxury-200 flex flex-col shrink-0 shadow-luxury">
+        <div className="p-5 border-b border-luxury-200">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gold-shine flex items-center justify-center shadow-gold">
               <Bot className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg leading-tight">SMS Agent</h1>
-              <p className="text-xs text-slate-400">AI-Powered Sales</p>
+              <h1 className="font-display font-semibold text-lg leading-tight text-luxury-900">SMS Agent</h1>
+              <p className="text-xs text-luxury-500">AI-Powered Sales</p>
             </div>
           </div>
         </div>
@@ -53,10 +53,10 @@ function AppShell() {
               to={to}
               end={to === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-brand-600/20 text-brand-300 border border-brand-500/30'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-gold-50 text-navy-800 border border-gold-200 shadow-sm'
+                    : 'text-luxury-500 hover:text-luxury-800 hover:bg-white/60'
                 }`
               }
             >
@@ -66,30 +66,30 @@ function AppShell() {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800 space-y-3">
+        <div className="p-4 border-t border-luxury-200 space-y-3 bg-white/40">
           <div className="flex items-center gap-2 text-xs">
-            <Radio className={`w-3.5 h-3.5 ${connected ? 'text-emerald-400' : 'text-red-400'}`} />
-            <span className={connected ? 'text-emerald-400' : 'text-red-400'}>
+            <Radio className={`w-3.5 h-3.5 ${connected ? 'text-emerald-600' : 'text-red-500'}`} />
+            <span className={connected ? 'text-emerald-700 font-medium' : 'text-red-600 font-medium'}>
               {connected ? 'Live' : 'Reconnecting...'}
             </span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <Zap className="w-4 h-4 text-amber-400 shrink-0" />
-            <span className="text-xs text-amber-300">Demo Mode Active</span>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gold-50 border border-gold-200">
+            <Zap className="w-4 h-4 text-gold-600 shrink-0" />
+            <span className="text-xs text-gold-700 font-medium">Demo Mode Active</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400">
+          <div className="flex items-center gap-2 px-3 py-2 text-sm text-luxury-600">
             <User className="w-4 h-4" />
-            <span className="flex-1 truncate">{agent?.name}</span>
-            <button onClick={logout} className="p-1 hover:text-white" title="Logout">
+            <span className="flex-1 truncate font-medium">{agent?.name}</span>
+            <button onClick={logout} className="p-1 hover:text-luxury-900 transition-colors" title="Logout">
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto bg-slate-950">
-        <header className="sticky top-0 z-10 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold capitalize">
+      <main className="flex-1 overflow-auto">
+        <header className="sticky top-0 z-10 bg-white/75 backdrop-blur-md border-b border-luxury-200 px-6 py-4 flex items-center justify-between shadow-sm">
+          <h2 className="page-title capitalize">
             {location.pathname === '/' ? 'Dashboard' : location.pathname.slice(1).replace(/-/g, ' ')}
           </h2>
           <NotificationBell />
@@ -112,8 +112,8 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-luxury-page flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full" />
       </div>
     );
   }

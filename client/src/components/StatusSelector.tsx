@@ -62,9 +62,9 @@ export default function StatusSelector({ value, onChange, disabled }: Props) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.96 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="absolute right-0 top-full mt-2 w-64 z-50 card p-1.5 shadow-2xl border-slate-700/80"
+            className="absolute right-0 top-full mt-2 w-64 z-50 card p-1.5 shadow-luxury-lg border-luxury-200"
           >
-            <p className="px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
+            <p className="px-3 py-2 text-[10px] uppercase tracking-wider text-luxury-400 font-semibold">
               Update Status
             </p>
             {STATUS_OPTIONS.map((status, i) => {
@@ -88,12 +88,12 @@ export default function StatusSelector({ value, onChange, disabled }: Props) {
                   `}
                 >
                   <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${cfg.dot}`} />
-                  <span className={`p-1.5 rounded-lg ${isSelected ? 'bg-black/20' : 'bg-slate-800/80'}`}>
+                  <span className={`p-1.5 rounded-lg ${isSelected ? 'bg-white shadow-sm' : 'bg-luxury-100'}`}>
                     <Icon className="w-4 h-4" />
                   </span>
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-medium capitalize">{cfg.label}</span>
-                    <span className="block text-[11px] text-slate-400 truncate">{cfg.description}</span>
+                    <span className="block text-[11px] text-luxury-500 truncate">{cfg.description}</span>
                   </span>
                   {isSelected && (
                     <motion.span

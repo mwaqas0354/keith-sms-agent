@@ -5,24 +5,53 @@
 @layer base {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #334155 transparent;
+    scrollbar-color: #D5C9B8 transparent;
+  }
+
+  body {
+    @apply bg-luxury-page text-luxury-800 antialiased;
   }
 }
 
 @layer components {
   .card {
-    @apply bg-slate-900/80 border border-slate-800 rounded-xl backdrop-blur-sm;
+    @apply bg-white/90 border border-luxury-200 rounded-2xl shadow-luxury backdrop-blur-sm;
   }
+
   .btn-primary {
-    @apply px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50;
+    @apply px-4 py-2.5 bg-navy-shine hover:opacity-90 text-white rounded-xl font-medium
+      transition-all duration-200 shadow-luxury disabled:opacity-50;
   }
+
   .btn-secondary {
-    @apply px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium transition-colors border border-slate-700;
+    @apply px-4 py-2.5 bg-white hover:bg-luxury-50 text-luxury-700 rounded-xl font-medium
+      transition-all duration-200 border border-luxury-200 shadow-sm;
   }
+
   .btn-danger {
-    @apply px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg font-medium transition-colors border border-red-800;
+    @apply px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl font-medium
+      transition-all duration-200 border border-red-200;
   }
+
   .input {
-    @apply w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent;
+    @apply w-full px-3.5 py-2.5 bg-white border border-luxury-200 rounded-xl text-luxury-800
+      placeholder-luxury-400 focus:outline-none focus:ring-2 focus:ring-gold-400/50
+      focus:border-gold-400 transition-shadow shadow-sm;
+  }
+
+  .page-title {
+    @apply font-display text-2xl font-semibold text-luxury-900 tracking-tight;
+  }
+
+  .text-muted {
+    @apply text-luxury-500;
+  }
+
+  .border-subtle {
+    @apply border-luxury-200;
+  }
+
+  .hover-surface {
+    @apply hover:bg-luxury-100/80 transition-colors;
   }
 }
