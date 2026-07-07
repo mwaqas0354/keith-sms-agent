@@ -80,6 +80,13 @@ export default function Conversations({ refreshKey }: Props) {
     setConversations(convos);
   };
 
+  const filterOptions = ['all', 'active', 'escalated', 'paused', 'won'] as const;
+
+  const filterCounts = filterOptions.reduce((acc, f) => {
+    acc[f] = f === 'all' ? conversations.length : conversations.filter((c) => c.status === f).length;
+    return acc;
+  }, {} as Record<string, number>);
+
   const filtered = conversations.filter((c) => {
     if (filter === 'all') return true;
     return c.status === filter;
@@ -95,10 +102,10 @@ export default function Conversations({ refreshKey }: Props) {
 
   return (
     <div className="flex gap-4 h-[calc(100vh-8rem)]">
-      <div className="w-80 shrink-0 card flex flex-col overflow-hidden">
+      <div className="w-[26rem] min-w-[22rem] shrink-0 card flex flex-col overflow-hidden">
         <div className="p-3 border-b border-slate-800">
-          <div className="flex gap-1 flex-wrap">
-            {['all', 'active', 'escalated', 'paused', 'won'].map((f) => (
+          <div className="flex gap-1.5 flex-wrap">
+            {filterOptions.map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
@@ -108,13 +115,16 @@ export default function Conversations({ refreshKey }: Props) {
                     : 'bg-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                {f}
+                {f} <span className="opacity-70">({filterCounts[f]})</span>
               </button>
             ))}
           </div>
         </div>
         <div className="flex-1 overflow-y-auto divide-y divide-slate-800">
-          {filtered.map((c) => (
+          {filtered.length === 0 ? (
+            <p className="p-6 text-sm text-slate-500 text-center">No conversations in this filter</p>
+          ) : (
+          filtered.map((c) => (
             <button
               key={c.id}
               onClick={() => selectConversation(c.id)}
@@ -132,7 +142,7 @@ export default function Conversations({ refreshKey }: Props) {
                 <span className="text-xs text-slate-600">{c.message_count} msgs</span>
               </div>
             </button>
-          ))}
+          )))}
         </div>
       </div>
 
