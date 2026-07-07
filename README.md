@@ -1,10 +1,10 @@
-# Keith — AI-Powered SMS Sales Agent
+# AI-Powered SMS Sales Agent
 
 A full-stack AI sales automation platform that handles two-way SMS conversations, syncs with CRM, and provides a real-time management dashboard for sales teams.
 
 ## Project Overview
 
-Keith is an intelligent SMS sales agent that engages leads via text message, qualifies opportunities, handles objections, and escalates to human agents when needed. The system includes:
+AI-Powered SMS Sales Agent is an intelligent SMS sales agent that engages leads via text message, qualifies opportunities, handles objections, and escalates to human agents when needed. The system includes:
 
 - An **AI conversation engine** powered by OpenAI (with a demo fallback when no API key is configured)
 - **Twilio SMS** integration for inbound and outbound messaging
@@ -106,7 +106,7 @@ The application runs locally in demo mode without any third-party API keys, maki
 ## Folder Structure
 
 ```
-keith-ai-sales-agent/
+ai-sales-agent/
 ├── client/                    # React frontend (Vite)
 │   ├── src/
 │   │   ├── api.ts             # REST API client
