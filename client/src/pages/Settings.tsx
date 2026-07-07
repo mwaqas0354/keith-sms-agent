@@ -100,7 +100,7 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-white">Who trains the bot?</p>
             <p className="text-slate-400 mt-1">
-              Your team trains the bot via the <strong className="text-slate-300">Bot Training</strong> section below —
+              Administrators train the bot via the <strong className="text-slate-300">Bot Training</strong> section below —
               no coding required. Edit the system prompt, product catalog, company info, and outreach templates.
               This is prompt engineering, not model fine-tuning.
             </p>
@@ -120,10 +120,10 @@ export default function SettingsPage() {
             </p>
           </div>
           <div>
-            <p className="font-medium text-white">Multi-tenant (separate orgs)?</p>
+            <p className="font-medium text-white">Multi-organization support?</p>
             <p className="text-slate-400 mt-1">
-              Not in this version — single organization with multiple agent logins. Multi-tenant would require
-              additional development time.
+              This deployment supports a single organization with multiple agent logins.
+              Separate organization isolation is not included in the current version.
             </p>
           </div>
         </div>
@@ -227,11 +227,11 @@ export default function SettingsPage() {
       <div className="card p-5 space-y-4">
         <h3 className="font-semibold">Zoho CRM</h3>
         <div>
-          <label className="block text-sm text-slate-400 mb-1">Client ID</label>
+          <label className="block text-sm text-slate-400 mb-1">OAuth Client ID</label>
           <input className="input" value={form.zoho_client_id} onChange={(e) => update('zoho_client_id', e.target.value)} />
         </div>
         <div>
-          <label className="block text-sm text-slate-400 mb-1">Client Secret</label>
+          <label className="block text-sm text-slate-400 mb-1">OAuth Client Secret</label>
           <input className="input" type="password" value={form.zoho_client_secret} onChange={(e) => update('zoho_client_secret', e.target.value)} />
         </div>
         <div>

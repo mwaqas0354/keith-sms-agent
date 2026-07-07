@@ -3,11 +3,11 @@ import { db } from '../db/index.js';
 import { addMessage, logEvent } from '../models/repository.js';
 
 const DEMO_LEADS = [
-  { name: 'Sarah Mitchell', phone: '+15551234001', email: 'sarah@techcorp.io', company: 'TechCorp Solutions' },
-  { name: 'James Rodriguez', phone: '+15551234002', email: 'james@innovate.co', company: 'Innovate Co' },
-  { name: 'Emily Chen', phone: '+15551234003', email: 'emily@startupxyz.com', company: 'StartupXYZ' },
-  { name: 'Michael Thompson', phone: '+15551234004', email: 'mike@globalent.com', company: 'Global Enterprises' },
-  { name: 'Lisa Park', phone: '+15551234005', email: 'lisa@datadriven.io', company: 'DataDriven Inc' },
+  { name: 'Alex Morgan', phone: '+15551234001', email: 'alex@example.com', company: 'Acme Corp' },
+  { name: 'Jordan Lee', phone: '+15551234002', email: 'jordan@example.com', company: 'Example Inc' },
+  { name: 'Taylor Brooks', phone: '+15551234003', email: 'taylor@example.com', company: 'Sample LLC' },
+  { name: 'Casey Rivera', phone: '+15551234004', email: 'casey@example.com', company: 'Demo Industries' },
+  { name: 'Riley Chen', phone: '+15551234005', email: 'riley@example.com', company: 'Test Co' },
 ];
 
 const CONVERSATION_SCRIPTS = [
@@ -17,9 +17,9 @@ const CONVERSATION_SCRIPTS = [
     deal_stage: 'qualifying',
     sentiment: 'positive',
     messages: [
-      { sender: 'ai' as const, body: "Hi Sarah! I'm your AI sales assistant. I noticed you recently showed interest in our business solutions. What challenges are you looking to solve?" },
+      { sender: 'ai' as const, body: "Hi Alex! I'm your AI sales assistant. I noticed you recently showed interest in our business solutions. What challenges are you looking to solve?" },
       { sender: 'lead' as const, body: "We need better automation for our sales pipeline. Currently everything is manual." },
-      { sender: 'ai' as const, body: "Perfect! Our Automation Suite integrates with your CRM and automates follow-ups. Teams your size typically save 15hrs/week. What's your current CRM?" },
+      { sender: 'ai' as const, body: "Perfect! Our Starter Plan integrates with your CRM and automates follow-ups. Teams your size typically save 15hrs/week. What's your current CRM?" },
       { sender: 'lead' as const, body: "We use Zoho CRM actually. Does it integrate?" },
     ],
   },
@@ -31,9 +31,9 @@ const CONVERSATION_SCRIPTS = [
     escalation_reason: 'Lead requested human agent',
     assigned_agent: 'Pending Assignment',
     messages: [
-      { sender: 'ai' as const, body: "Hi James! I'm from the sales team. Thanks for your interest! What brought you to us today?" },
-      { sender: 'lead' as const, body: "Looking at your AI analytics platform. We have a team of 50." },
-      { sender: 'ai' as const, body: "Great fit! Our AI Analytics Platform at $499/mo includes custom dashboards and predictive insights. Want a demo?" },
+      { sender: 'ai' as const, body: "Hi Jordan! I'm from the sales team. Thanks for your interest! What brought you to us today?" },
+      { sender: 'lead' as const, body: "Looking at your analytics platform. We have a team of 50." },
+      { sender: 'ai' as const, body: "Great fit! Our Professional Plan at $499/mo includes custom dashboards and predictive insights. Want a demo?" },
       { sender: 'lead' as const, body: "Can I speak to someone about enterprise pricing? We need custom features." },
       { sender: 'system' as const, body: "I understand you'd like to speak with someone from our team. I'm connecting you with a human agent now!" },
     ],
@@ -44,11 +44,11 @@ const CONVERSATION_SCRIPTS = [
     deal_stage: 'proposal',
     sentiment: 'positive',
     messages: [
-      { sender: 'ai' as const, body: "Hello Emily! Great to connect. I'm here to help find the perfect solution. What's your biggest challenge?" },
+      { sender: 'ai' as const, body: "Hello Taylor! Great to connect. I'm here to help find the perfect solution. What's your biggest challenge?" },
       { sender: 'lead' as const, body: "We need predictive analytics for our e-commerce data." },
-      { sender: 'ai' as const, body: "Our AI Analytics Platform is built for exactly that! It predicts trends and optimizes inventory. Interested in a 14-day free trial?" },
+      { sender: 'ai' as const, body: "Our Professional Plan is built for exactly that! It predicts trends and optimizes inventory. Interested in a 14-day free trial?" },
       { sender: 'lead' as const, body: "Yes! How do we get started?" },
-      { sender: 'ai' as const, body: "Awesome! I'll set up your trial account. Can you confirm your email is emily@startupxyz.com?" },
+      { sender: 'ai' as const, body: "Awesome! I'll set up your trial account. Can you confirm your email is taylor@example.com?" },
     ],
   },
   {
@@ -57,11 +57,11 @@ const CONVERSATION_SCRIPTS = [
     deal_stage: 'closed_won',
     sentiment: 'positive',
     messages: [
-      { sender: 'ai' as const, body: "Hi Michael! I'm your AI sales assistant. I see Global Enterprises is exploring automation solutions. Tell me about your needs." },
+      { sender: 'ai' as const, body: "Hi Casey! I'm your AI sales assistant. I see you're exploring automation solutions. Tell me about your needs." },
       { sender: 'lead' as const, body: "We need the full enterprise package with dedicated support." },
-      { sender: 'ai' as const, body: "Our Enterprise Package at $999/mo includes everything plus a dedicated account manager. Shall I prepare a proposal?" },
+      { sender: 'ai' as const, body: "Our Enterprise Plan at $999/mo includes everything plus a dedicated account manager. Shall I prepare a proposal?" },
       { sender: 'lead' as const, body: "Yes, send it over. We're ready to move forward." },
-      { sender: 'ai' as const, body: "Fantastic! Proposal sent to mike@globalent.com. Welcome aboard! 🎉" },
+      { sender: 'ai' as const, body: "Fantastic! Proposal sent to your email. Welcome aboard!" },
     ],
   },
   {
@@ -70,7 +70,7 @@ const CONVERSATION_SCRIPTS = [
     deal_stage: 'qualifying',
     sentiment: 'neutral',
     messages: [
-      { sender: 'ai' as const, body: "Hi Lisa! I'm your AI sales assistant. What challenges are you looking to solve?" },
+      { sender: 'ai' as const, body: "Hi Riley! I'm your AI sales assistant. What challenges are you looking to solve?" },
       { sender: 'lead' as const, body: "Just browsing for now. What do you offer?" },
     ],
   },

@@ -37,7 +37,7 @@ const router = Router();
 
 router.get('/', (_req, res) => {
   res.json({
-    name: 'AI Sales Agent API',
+    name: 'SMS Sales Agent API',
     status: 'running',
     dashboard: 'http://localhost:5173',
     aiPlatform: 'OpenAI (GPT-4o-mini default)',
@@ -274,9 +274,9 @@ router.post('/demo/simulate-conversation', async (req, res) => {
     const script = [
       { sender: 'ai' as const, body: `Hi ${lead.name.split(' ')[0]}! I'm your AI sales assistant. What challenges are you looking to solve?` },
       { sender: 'lead' as const, body: "Hi! We're looking to automate our sales process." },
-      { sender: 'ai' as const, body: "That's our specialty! Our Business Automation Suite helps teams save 40% on manual tasks. What's your team size?" },
+      { sender: 'ai' as const, body: "That's our specialty! Our Starter Plan helps teams save time on manual tasks. What's your team size?" },
       { sender: 'lead' as const, body: "About 25 people. What's the pricing?" },
-      { sender: 'ai' as const, body: "For a team your size, our suite runs $299/mo with full CRM integration. Want a free 14-day trial?" },
+      { sender: 'ai' as const, body: "For a team your size, our plan runs $299/mo with full CRM integration. Want a free 14-day trial?" },
       { sender: 'lead' as const, body: "Sounds interesting. Can I speak to someone about a custom plan?" },
     ];
 

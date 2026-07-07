@@ -2,7 +2,7 @@
   "name": "ai-sms-sales-agent",
   "version": "1.0.0",
   "private": true,
-  "description": "AI-Powered SMS Sales Agent & Management Dashboard",
+  "description": "AI-powered SMS sales agent and management dashboard",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "npm run dev --prefix server",

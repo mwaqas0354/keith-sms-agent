@@ -40,8 +40,8 @@ function AppShell() {
               <Bot className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg leading-tight">Sales Agent</h1>
-              <p className="text-xs text-slate-400">AI Sales Agent</p>
+              <h1 className="font-bold text-lg leading-tight">SMS Agent</h1>
+              <p className="text-xs text-slate-400">AI-Powered Sales</p>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@ function AppShell() {
       <main className="flex-1 overflow-auto bg-slate-950">
         <header className="sticky top-0 z-10 bg-slate-950/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold capitalize">
-            {location.pathname === '/' ? "God's Eye View" : location.pathname.slice(1)}
+            {location.pathname === '/' ? 'Dashboard' : location.pathname.slice(1).replace(/-/g, ' ')}
           </h2>
           <NotificationBell />
         </header>

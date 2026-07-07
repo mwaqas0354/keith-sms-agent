@@ -1,4 +1,4 @@
-# AI-Powered SMS Sales Agent
+# SMS Sales Agent — AI-Powered Platform
 
 A full-stack AI sales automation platform that handles two-way SMS conversations, syncs with CRM, and provides a real-time management dashboard for sales teams.
 
@@ -9,7 +9,7 @@ This platform is an intelligent SMS sales agent that engages leads via text mess
 - An **AI conversation engine** powered by OpenAI (with a demo fallback when no API key is configured)
 - **Twilio SMS** integration for inbound and outbound messaging
 - **Zoho CRM** integration for lead sync, notes, and task notifications
-- A **real-time dashboard** ("God's Eye View") for monitoring and managing all conversations
+- A **real-time dashboard** for monitoring and managing all conversations
 - **Agent authentication** so sales reps can log in, take over conversations, and resume AI
 
 The application runs locally in demo mode without any third-party API keys, making it easy for developers to explore and extend the codebase immediately.

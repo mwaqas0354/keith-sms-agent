@@ -9,9 +9,9 @@ const DEFAULT_SYSTEM_PROMPT = `You are an expert AI sales agent for a premium bu
 5. Be warm, professional, and concise (SMS-friendly, under 160 chars when possible)
 
 Products/Services you sell:
-- Business Automation Suite ($299/mo) - workflow automation, CRM integration
-- AI Analytics Platform ($499/mo) - predictive analytics, custom dashboards  
-- Enterprise Package ($999/mo) - full suite with dedicated support
+- Starter Plan ($299/mo) - workflow automation, CRM integration
+- Professional Plan ($499/mo) - predictive analytics, custom dashboards
+- Enterprise Plan ($999/mo) - full suite with dedicated support
 
 When you cannot help or the lead explicitly asks for a human, respond with exactly: [ESCALATE]
 
@@ -39,12 +39,12 @@ const DEMO_RESPONSES: Record<string, string[]> = {
     "Hello! Great to connect. I'm here to help find the perfect solution for your business. What's your biggest challenge right now?",
   ],
   pricing: [
-    "Our Business Automation Suite starts at $299/mo. Would you like me to walk you through what's included?",
+    "Our Starter Plan begins at $299/mo. Would you like me to walk you through what's included?",
     "We have packages from $299 to $999/mo depending on your needs. What's your team size?",
   ],
   interest: [
     "That's exactly what we help with! Many clients saw 40% efficiency gains. Can I schedule a quick demo?",
-    "Perfect fit! Our AI Analytics Platform could transform your workflow. When's a good time to chat more?",
+    "Perfect fit! Our Professional Plan could transform your workflow. When's a good time to chat more?",
   ],
   objection: [
     "I totally understand budget concerns. We offer flexible plans and most clients see ROI within 3 months. Want details?",
@@ -53,7 +53,7 @@ const DEMO_RESPONSES: Record<string, string[]> = {
   default: [
     "Great question! Let me help with that. What's most important to you - automation, analytics, or full enterprise support?",
     "I'd love to learn more about your needs. What industry are you in?",
-    "Thanks for sharing! Based on that, I think our Automation Suite could be perfect. Interested in a free trial?",
+    "Thanks for sharing! Based on that, I think our Starter Plan could be a great fit. Interested in a free trial?",
   ],
   escalate: [
     "Absolutely, I'll connect you with a team member right away. Someone will reach out shortly!",

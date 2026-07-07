@@ -9,8 +9,8 @@ interface Props {
 export default function DemoPanel({ onAction }: Props) {
   const [loading, setLoading] = useState('');
   const [smsPhone, setSmsPhone] = useState('+15559999001');
-  const [smsBody, setSmsBody] = useState('Hi, I am interested in your automation suite. What are the prices?');
-  const [leadName, setLeadName] = useState('Alex Johnson');
+  const [smsBody, setSmsBody] = useState('Hi, I am interested in your services. What are the prices?');
+  const [leadName, setLeadName] = useState('Demo Lead');
   const [leadPhone, setLeadPhone] = useState('+15559999002');
 
   const run = async (action: string, fn: () => Promise<unknown>) => {
