@@ -8,6 +8,11 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3001',
       '/ws': { target: 'ws://localhost:3001', ws: true },
+      '/keith-api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/keith-api/, '/api'),
+      },
     },
   },
 });

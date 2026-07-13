@@ -1,11 +1,13 @@
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, BarChart3, Settings, Radio,
-  Bot, Zap, LogOut, User,
+  Bot, Zap, LogOut, User, Users, FileArchive,
 } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
+import Leads from './pages/Leads';
 import Conversations from './pages/Conversations';
 import Analytics from './pages/Analytics';
+import PdfCompressor from './pages/PdfCompressor';
 import SettingsPage from './pages/Settings';
 import Login from './pages/Login';
 import NotificationBell from './components/NotificationBell';
@@ -15,8 +17,10 @@ import { useState, useCallback } from 'react';
 
 const nav = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/leads', icon: Users, label: 'Leads' },
   { to: '/conversations', icon: MessageSquare, label: 'Conversations' },
   { to: '/analytics', icon: BarChart3, label: 'Analytics' },
+  { to: '/pdf-compressor', icon: FileArchive, label: 'PDF Compressor' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
@@ -97,8 +101,10 @@ function AppShell() {
         <div className="p-6">
           <Routes>
             <Route path="/" element={<Dashboard refreshKey={refreshKey} />} />
+            <Route path="/leads" element={<Leads refreshKey={refreshKey} />} />
             <Route path="/conversations" element={<Conversations refreshKey={refreshKey} />} />
             <Route path="/analytics" element={<Analytics refreshKey={refreshKey} />} />
+            <Route path="/pdf-compressor" element={<PdfCompressor />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>

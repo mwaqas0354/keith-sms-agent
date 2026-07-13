@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Send, Pause, Play, Trophy, XCircle, Bot, User, MessageCircle, Phone,
+  Send, Pause, Play, Trophy, XCircle, Bot, User, MessageCircle, Phone, Search, X,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api, Conversation, Message } from '../api';
@@ -23,6 +23,7 @@ export default function Conversations({ refreshKey }: Props) {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const selectedId = searchParams.get('id');
@@ -103,8 +104,15 @@ export default function Conversations({ refreshKey }: Props) {
   }, {} as Record<string, number>);
 
   const filtered = conversations.filter((c) => {
-    if (filter === 'all') return true;
-    return c.status === filter;
+    if (filter !== 'all' && c.status !== filter) return false;
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    return (
+      c.lead_name.toLowerCase().includes(q) ||
+      c.lead_phone.toLowerCase().includes(q) ||
+      (c.lead_company || '').toLowerCase().includes(q) ||
+      (c.last_message || '').toLowerCase().includes(q)
+    );
   });
 
   const isClosed = selected?.status === 'won' || selected?.status === 'lost';
@@ -120,7 +128,24 @@ export default function Conversations({ refreshKey }: Props) {
   return (
     <div className="flex gap-4 h-[calc(100vh-8rem)]">
       <div className="w-[26rem] min-w-[22rem] shrink-0 card flex flex-col overflow-hidden">
-        <div className="p-3 border-b border-luxury-200">
+        <div className="p-3 border-b border-luxury-200 space-y-2">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-luxury-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search conversations..."
+              className="input pl-8 pr-8 py-1.5 text-sm"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-luxury-400 hover:text-luxury-700"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
           <div className="flex gap-1.5 flex-wrap">
             {filterOptions.map((f) => (
               <button
@@ -139,7 +164,9 @@ export default function Conversations({ refreshKey }: Props) {
         </div>
         <div className="flex-1 overflow-y-auto divide-y divide-luxury-150">
           {filtered.length === 0 ? (
-            <p className="p-6 text-sm text-luxury-400 text-center">No conversations in this filter</p>
+            <p className="p-6 text-sm text-luxury-400 text-center">
+              {search ? 'No conversations match your search' : 'No conversations in this filter'}
+            </p>
           ) : (
           filtered.map((c) => (
             <button

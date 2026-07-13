@@ -26,6 +26,20 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+export interface Lead {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  company: string | null;
+  zoho_id: string | null;
+  deal_stage: string;
+  source: string;
+  created_at: string;
+  updated_at: string;
+  status: string;
+}
+
 export interface Conversation {
   id: string;
   lead_id: string;
@@ -101,6 +115,9 @@ export interface Agent {
 }
 
 export const api = {
+  getLeads: () => request<Lead[]>('/leads'),
+  createLead: (data: { name: string; phone: string; email?: string; company?: string }) =>
+    request<Lead>('/leads', { method: 'POST', body: JSON.stringify(data) }),
   getConversations: () => request<Conversation[]>('/conversations'),
   getConversation: (id: string) => request<Conversation & { messages: Message[] }>(`/conversations/${id}`),
   reply: (id: string, body: string) =>

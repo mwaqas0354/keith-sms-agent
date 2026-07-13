@@ -29,3 +29,14 @@ Thumbs.db
 # Coverage & test artifacts
 coverage/
 .nyc_output/
+
+# Keith (PDF resizer) - Python env & generated files
+Keith - pdf resizer/venv/
+Keith - pdf resizer/__pycache__/
+Keith - pdf resizer/backend/__pycache__/
+Keith - pdf resizer/data/uploads/
+Keith - pdf resizer/data/outputs/
+*.pyc
+
+# Claude settings (local)
+.claude/

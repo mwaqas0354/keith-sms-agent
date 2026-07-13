@@ -9,6 +9,7 @@ import {
   addMessage,
   logEvent,
   updateConversation,
+  getAllLeads,
 } from '../models/repository.js';
 import {
   handleInboundSMS,
@@ -99,6 +100,22 @@ router.post('/webhooks/zoho/lead', async (req, res) => {
 // ── Protected routes (require agent login) ─────────────────
 
 router.use(authMiddleware);
+
+router.get('/leads', (_req, res) => {
+  res.json(getAllLeads());
+});
+
+router.post('/leads', (req, res) => {
+  try {
+    const { name, phone, email, company } = req.body;
+    if (!name || !phone) return res.status(400).json({ error: 'name and phone required' });
+    const lead = createLead({ name, phone, email, company, source: 'manual' });
+    logEvent('lead_created', undefined, lead.id, { phone, source: 'manual' });
+    res.json({ ...lead, status: 'new' });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Failed' });
+  }
+});
 
 router.get('/conversations', (_req, res) => {
   res.json(getAllConversations());

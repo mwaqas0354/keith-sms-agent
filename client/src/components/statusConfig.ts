@@ -1,12 +1,13 @@
 import {
-  Radio, AlertTriangle, Pause, Trophy, XCircle, type LucideIcon,
+  Radio, AlertTriangle, Pause, Trophy, XCircle, Sparkles, type LucideIcon,
 } from 'lucide-react';
 
 export type ConversationStatus = 'active' | 'escalated' | 'paused' | 'won' | 'lost';
+export type LeadStatus = ConversationStatus | 'new';
 
 export const STATUS_OPTIONS: ConversationStatus[] = ['active', 'escalated', 'paused', 'won', 'lost'];
 
-export const STATUS_CONFIG: Record<ConversationStatus, {
+export const STATUS_CONFIG: Record<LeadStatus, {
   label: string;
   description: string;
   icon: LucideIcon;
@@ -16,6 +17,16 @@ export const STATUS_CONFIG: Record<ConversationStatus, {
   hover: string;
   glow: string;
 }> = {
+  new: {
+    label: 'New',
+    description: 'Lead created — outreach not started',
+    icon: Sparkles,
+    badge: 'bg-navy-50 text-navy-700 border-navy-200',
+    dot: 'bg-navy-500',
+    ring: 'ring-navy-400/40',
+    hover: 'hover:bg-navy-50',
+    glow: 'shadow-[0_0_16px_rgba(30,58,138,0.15)]',
+  },
   active: {
     label: 'Active',
     description: 'AI is handling the conversation',

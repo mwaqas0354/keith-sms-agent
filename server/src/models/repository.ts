@@ -182,6 +182,22 @@ export function getAnalytics() {
   };
 }
 
+export interface LeadWithStatus extends Lead {
+  status: string;
+}
+
+export function getAllLeads(): LeadWithStatus[] {
+  return db.prepare(`
+    SELECT l.*,
+      COALESCE(
+        (SELECT c.status FROM conversations c WHERE c.lead_id = l.id ORDER BY c.created_at DESC LIMIT 1),
+        'new'
+      ) as status
+    FROM leads l
+    ORDER BY l.created_at DESC
+  `).all() as LeadWithStatus[];
+}
+
 export function getLeadByPhone(phone: string): Lead | undefined {
   return db.prepare('SELECT * FROM leads WHERE phone = ?').get(phone) as Lead | undefined;
 }
