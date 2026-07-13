@@ -1,4 +1,9 @@
-const KEITH_BASE = '/keith-api';
+// In dev, Vite proxies /keith-api to localhost:8000 (see vite.config.ts).
+// In production there's no dev proxy, so VITE_KEITH_API_URL must point
+// directly at Keith's deployed URL (e.g. https://keith-pdf-backend.onrender.com).
+const KEITH_BASE = import.meta.env.VITE_KEITH_API_URL
+  ? `${import.meta.env.VITE_KEITH_API_URL}/api`
+  : '/keith-api';
 
 export type CompressionPreset = 'light' | 'balanced' | 'aggressive' | 'maximum';
 

@@ -1,0 +1,26 @@
+services:
+  - name: sms-agent
+    type: web
+    runtime: node
+    plan: free
+    buildCommand: npm run install:all && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DEMO_MODE
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: VITE_KEITH_API_URL
+        value: https://keith-pdf-backend.onrender.com
+
+  - name: keith-pdf-backend
+    type: web
+    runtime: python
+    plan: free
+    rootDir: "./Keith - pdf resizer"
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
