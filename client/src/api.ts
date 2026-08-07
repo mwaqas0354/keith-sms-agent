@@ -88,12 +88,15 @@ export interface Settings {
   settings: Record<string, string>;
   integrations: {
     openai: boolean;
-    twilio: boolean;
+    iblusend?: boolean;
+    twilio?: boolean;
     zoho: boolean;
     demoMode: boolean;
     aiPlatform?: string;
     aiModel?: string;
+    messaging?: string;
   };
+
 }
 
 export interface AppNotification {

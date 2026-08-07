@@ -20,20 +20,23 @@ export default function SettingsPage() {
       setForm({
         openai_api_key: '',
         openai_model: s.settings.openai_model || 'gpt-4o-mini',
-        twilio_account_sid: '',
-        twilio_auth_token: '',
-        twilio_phone_number: s.settings.twilio_phone_number || '',
+        iblusend_api_key: '',
+        iblusend_webhook_secret: '',
+        iblusend_device_id: s.settings.iblusend_device_id || '',
         zoho_client_id: '',
         zoho_client_secret: '',
         zoho_refresh_token: '',
         demo_mode: s.integrations.demoMode ? 'true' : 'false',
         bot_system_prompt: s.settings.bot_system_prompt || '',
         bot_products_catalog: s.settings.bot_products_catalog || '',
-        bot_company_name: s.settings.bot_company_name || '',
+        bot_company_name: s.settings.bot_company_name || 'Nationwide Advance',
         bot_outreach_template: s.settings.bot_outreach_template || '',
         zoho_notify_on_conversation: s.settings.zoho_notify_on_conversation || 'true',
         zoho_notify_on_escalation: s.settings.zoho_notify_on_escalation || 'true',
+        escalation_notify_email: s.settings.escalation_notify_email || 'tech@nationwideadvance.com',
       });
+
+
     });
     if (agent?.role === 'admin') {
       api.getAgents().then(setAgents).catch(() => {});
@@ -77,9 +80,10 @@ export default function SettingsPage() {
 
   const integrations = [
     { name: 'OpenAI', key: 'openai', configured: settings.integrations.openai },
-    { name: 'Twilio', key: 'twilio', configured: settings.integrations.twilio },
+    { name: 'iBluSend', key: 'iblusend', configured: !!settings.integrations.iblusend },
     { name: 'Zoho CRM', key: 'zoho', configured: settings.integrations.zoho },
   ];
+
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -209,23 +213,45 @@ export default function SettingsPage() {
       </div>
 
       <div className="card p-5 space-y-4">
-        <h3 className="font-semibold text-luxury-900">Twilio SMS</h3>
+        <h3 className="font-semibold text-luxury-900">iBluSend (iMessage / SMS)</h3>
+        <p className="text-sm text-luxury-500">
+          Primary messaging channel. Create an API key in iBluSend → Developer → API Keys.
+          Point Outbound Webhooks to <code className="text-xs">/api/webhooks/iblusend</code>.
+        </p>
         <div>
-          <label className="block text-sm text-luxury-500 mb-1">Account SID</label>
-          <input className="input" placeholder="AC..." value={form.twilio_account_sid} onChange={(e) => update('twilio_account_sid', e.target.value)} />
+          <label className="block text-sm text-luxury-500 mb-1">API Key</label>
+          <input className="input" type="password" placeholder="iblu_... or iblu_test_..." value={form.iblusend_api_key} onChange={(e) => update('iblusend_api_key', e.target.value)} />
         </div>
         <div>
-          <label className="block text-sm text-luxury-500 mb-1">Auth Token</label>
-          <input className="input" type="password" placeholder="Auth token" value={form.twilio_auth_token} onChange={(e) => update('twilio_auth_token', e.target.value)} />
+          <label className="block text-sm text-luxury-500 mb-1">Webhook Signing Secret</label>
+          <input className="input" type="password" placeholder="Webhook secret" value={form.iblusend_webhook_secret} onChange={(e) => update('iblusend_webhook_secret', e.target.value)} />
         </div>
         <div>
-          <label className="block text-sm text-luxury-500 mb-1">Phone Number</label>
-          <input className="input" placeholder="+1234567890" value={form.twilio_phone_number} onChange={(e) => update('twilio_phone_number', e.target.value)} />
+          <label className="block text-sm text-luxury-500 mb-1">Default Device ID (optional)</label>
+          <input className="input" placeholder="device UUID" value={form.iblusend_device_id} onChange={(e) => update('iblusend_device_id', e.target.value)} />
+        </div>
+      </div>
+
+      <div className="card p-5 space-y-4">
+        <h3 className="font-semibold text-luxury-900">Escalation Alerts</h3>
+        <p className="text-sm text-luxury-500">
+          When a lead asks for a human, the dashboard bell rings and an email is sent to this address.
+        </p>
+        <div>
+          <label className="block text-sm text-luxury-500 mb-1">Notify email</label>
+          <input
+            className="input"
+            type="email"
+            value={form.escalation_notify_email}
+            onChange={(e) => update('escalation_notify_email', e.target.value)}
+            placeholder="tech@nationwideadvance.com"
+          />
         </div>
       </div>
 
       <div className="card p-5 space-y-4">
         <h3 className="font-semibold text-luxury-900">Zoho CRM</h3>
+
         <div>
           <label className="block text-sm text-luxury-500 mb-1">OAuth Client ID</label>
           <input className="input" value={form.zoho_client_id} onChange={(e) => update('zoho_client_id', e.target.value)} />

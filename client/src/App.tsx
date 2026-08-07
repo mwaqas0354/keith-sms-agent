@@ -1,8 +1,9 @@
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, BarChart3, Settings, Radio,
-  Bot, Zap, LogOut, User, Users, FileArchive,
+  Bot, LogOut, User, Users, FileArchive,
 } from 'lucide-react';
+
 import Dashboard from './pages/Dashboard';
 import Leads from './pages/Leads';
 import Conversations from './pages/Conversations';
@@ -72,14 +73,10 @@ function AppShell() {
 
         <div className="p-4 border-t border-luxury-200 space-y-3 bg-white/40">
           <div className="flex items-center gap-2 text-xs">
-            <Radio className={`w-3.5 h-3.5 ${connected ? 'text-emerald-600' : 'text-red-500'}`} />
-            <span className={connected ? 'text-emerald-700 font-medium' : 'text-red-600 font-medium'}>
-              {connected ? 'Live' : 'Reconnecting...'}
+            <Radio className={`w-3.5 h-3.5 ${connected ? 'text-emerald-600' : 'text-amber-600'}`} />
+            <span className={connected ? 'text-emerald-700 font-medium' : 'text-amber-700 font-medium'}>
+              {connected ? 'Live' : 'Polling'}
             </span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gold-50 border border-gold-200">
-            <Zap className="w-4 h-4 text-gold-600 shrink-0" />
-            <span className="text-xs text-gold-700 font-medium">Demo Mode Active</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-2 text-sm text-luxury-600">
             <User className="w-4 h-4" />

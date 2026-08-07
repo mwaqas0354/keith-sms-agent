@@ -1,23 +1,34 @@
 import OpenAI from 'openai';
 import { getSetting } from '../db/index.js';
 
-const DEFAULT_SYSTEM_PROMPT = `You are an expert AI sales agent for a premium business solutions company. Your goals:
-1. Qualify leads by understanding their needs, budget, and timeline
-2. Answer product/service questions confidently and persuasively
-3. Handle objections professionally
-4. Guide conversations toward closing deals
-5. Be warm, professional, and concise (SMS-friendly, under 160 chars when possible)
+const DEFAULT_SYSTEM_PROMPT = `You are an expert AI sales agent for Nationwide Advance, a business funding company that helps US small businesses get working capital (MCA / merchant cash advance / business advances).
 
-Products/Services you sell:
-- Starter Plan ($299/mo) - workflow automation, CRM integration
-- Professional Plan ($499/mo) - predictive analytics, custom dashboards
-- Enterprise Plan ($999/mo) - full suite with dedicated support
+Your goals:
+1. Qualify leads: business type, monthly revenue, time in business, funding amount needed, urgency
+2. Answer funding questions clearly and persuasively without promising approval or exact terms
+3. Handle objections professionally (rates, stacking, timing, trust)
+4. Move qualified leads toward a quick application or human underwriter handoff
+5. Be warm, professional, and concise (iMessage/SMS-friendly; keep most replies under ~300 chars)
 
-When you cannot help or the lead explicitly asks for a human, respond with exactly: [ESCALATE]
+Qualification questions to work through naturally (not as a rigid checklist):
+- What type of business do you run?
+- About how much in monthly revenue / card sales?
+- How long have you been in business?
+- How much funding are you looking for?
+- What will the funds be used for?
 
-Current deal stages: new → qualifying → proposal → negotiation → closed_won/closed_lost
+Never do:
+- Guarantee approval, rates, or funding amounts
+- Ask for SSN, full bank login, or card numbers over text
+- Bad-mouth competitors or pressure illegally
+- Continue after STOP / unsubscribe / not interested
 
-Keep responses natural for SMS. No markdown. No bullet points.`;
+When you cannot help, compliance risk appears, or the lead asks for a human, respond with exactly: [ESCALATE]
+
+Deal stages: new → qualifying → proposal → negotiation → closed_won/closed_lost
+
+Keep responses natural for text. No markdown. No bullet points.`;
+
 
 export function getSystemPrompt(): string {
   const custom = getSetting('bot_system_prompt');
@@ -25,8 +36,9 @@ export function getSystemPrompt(): string {
   const company = getSetting('bot_company_name');
   let prompt = custom || DEFAULT_SYSTEM_PROMPT;
   if (company && !custom) {
-    prompt = prompt.replace('a premium business solutions company', company);
+    prompt = prompt.replace('Nationwide Advance, a business funding company', company);
   }
+
   if (products) {
     prompt += `\n\nAdditional product info:\n${products}`;
   }
@@ -35,36 +47,41 @@ export function getSystemPrompt(): string {
 
 const DEMO_RESPONSES: Record<string, string[]> = {
   greeting: [
-    "Hi! I'm from the sales team. Thanks for your interest! What brought you to us today?",
-    "Hello! Great to connect. I'm here to help find the perfect solution for your business. What's your biggest challenge right now?",
+    "Hi! This is Nationwide Advance. Thanks for your interest in business funding — what's your business type?",
+    "Hello! Happy to help with working capital. Roughly how much monthly revenue does the business do?",
   ],
   pricing: [
-    "Our Starter Plan begins at $299/mo. Would you like me to walk you through what's included?",
-    "We have packages from $299 to $999/mo depending on your needs. What's your team size?",
+    "Rates depend on revenue, time in business, and amount requested — no one-size fee. What's your monthly revenue range?",
+    "We customize offers after a quick review. How much funding are you looking for?",
   ],
   interest: [
-    "That's exactly what we help with! Many clients saw 40% efficiency gains. Can I schedule a quick demo?",
-    "Perfect fit! Our Professional Plan could transform your workflow. When's a good time to chat more?",
+    "Great — we help businesses get working capital fast. How long have you been operating?",
+    "Perfect. To see if we can help, about how much monthly revenue and how much funding do you need?",
   ],
   objection: [
-    "I totally understand budget concerns. We offer flexible plans and most clients see ROI within 3 months. Want details?",
-    "Fair point! Let me connect you with our team lead who can discuss custom pricing. One moment!",
+    "Totally fair. Many owners compare a few options first. Want me to gather a few details so a specialist can review?",
+    "Understood. I can connect you with a funding specialist who can walk through options — sound good?",
   ],
   default: [
-    "Great question! Let me help with that. What's most important to you - automation, analytics, or full enterprise support?",
-    "I'd love to learn more about your needs. What industry are you in?",
-    "Thanks for sharing! Based on that, I think our Starter Plan could be a great fit. Interested in a free trial?",
+    "Got it. What type of business do you run, and roughly how much monthly revenue?",
+    "Thanks! How much funding are you looking for, and what will it be used for?",
+    "Appreciate that. How long have you been in business?",
   ],
   escalate: [
-    "Absolutely, I'll connect you with a team member right away. Someone will reach out shortly!",
+    "Absolutely — I'll connect you with a Nationwide Advance specialist now. Someone will follow up shortly!",
   ],
 };
 
+
 function isDemoMode(): boolean {
+  // Explicit env wins over DB (so .env DEMO_MODE=false enables real OpenAI)
+  if (process.env.DEMO_MODE === 'false') return false;
+  if (process.env.DEMO_MODE === 'true') return true;
   const demoSetting = getSetting('demo_mode');
   if (demoSetting !== null) return demoSetting === 'true';
-  return process.env.DEMO_MODE !== 'false';
+  return true;
 }
+
 
 function getOpenAIKey(): string | null {
   return getSetting('openai_api_key') || process.env.OPENAI_API_KEY || null;
@@ -80,7 +97,12 @@ export function analyzeSentiment(text: string): 'positive' | 'neutral' | 'negati
 
 export function shouldEscalate(text: string, sentiment: string): { escalate: boolean; reason?: string } {
   const lower = text.toLowerCase();
-  if (/\b(speak to (a )?(human|person|agent|manager|someone)|talk to (a )?(human|person|real)|call me|not a bot)\b/.test(lower)) {
+  // Match "speak to a real person", "talk to a human", "connect me with someone", etc.
+  if (
+    /\b(speak|talk|connect me)\b.{0,40}\b(human|person|agent|manager|someone|rep|specialist)\b/.test(lower) ||
+    /\b(real person|live (person|agent|human)|actual (person|human)|not a bot|call me)\b/.test(lower) ||
+    /\b(can i (get|have) (a )?(human|person|agent))\b/.test(lower)
+  ) {
     return { escalate: true, reason: 'Lead requested human agent' };
   }
   if (sentiment === 'frustrated') {
@@ -92,14 +114,16 @@ export function shouldEscalate(text: string, sentiment: string): { escalate: boo
   return { escalate: false };
 }
 
+
 function getDemoResponse(inboundText: string): string {
   const lower = inboundText.toLowerCase();
   if (shouldEscalate(inboundText, analyzeSentiment(inboundText)).escalate) {
     return DEMO_RESPONSES.escalate[0];
   }
-  if (/\b(price|cost|how much|pricing|expensive|budget)\b/.test(lower)) {
+  if (/\b(price|cost|how much|pricing|expensive|budget|rate|factor)\b/.test(lower)) {
     return DEMO_RESPONSES.pricing[Math.floor(Math.random() * DEMO_RESPONSES.pricing.length)];
   }
+
   if (/\b(yes|interested|tell me more|sounds good|demo|trial)\b/.test(lower)) {
     return DEMO_RESPONSES.interest[Math.floor(Math.random() * DEMO_RESPONSES.interest.length)];
   }
@@ -121,10 +145,11 @@ export async function generateAIResponse(
 
   if (escalation.escalate) {
     return {
-      response: "I understand you'd like to speak with someone from our team. I'm connecting you with a human agent now — they'll be with you shortly!",
+      response: "Absolutely — I'll connect you with a Nationwide Advance specialist now. Someone from the team will follow up shortly!",
       shouldEscalate: true,
       escalationReason: escalation.reason,
     };
+
   }
 
   const apiKey = getOpenAIKey();
@@ -179,5 +204,5 @@ export function getInitialOutreachMessage(leadName: string): string {
   if (template) {
     return template.replace(/\{firstName\}/g, firstName).replace(/\{name\}/g, leadName);
   }
-  return `Hi ${firstName}! I'm your AI sales assistant. I noticed you recently showed interest in our business solutions. I'd love to help you find the perfect fit. What challenges are you looking to solve?`;
+  return `Hi ${firstName}! This is Nationwide Advance — we help businesses get working capital quickly. Are you still looking for funding, and roughly how much do you need?`;
 }
