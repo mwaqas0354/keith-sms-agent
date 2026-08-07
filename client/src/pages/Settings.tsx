@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 import {
-  Save, CheckCircle, XCircle, Key, Bot, HelpCircle, Users, Bell,
+  Save, CheckCircle, XCircle, Key, Bot, HelpCircle, Bell,
 } from 'lucide-react';
-import { api, Settings, Agent } from '../api';
-import { useAuth } from '../context/AuthContext';
+import { api, Settings } from '../api';
 
 export default function SettingsPage() {
-  const { agent } = useAuth();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [form, setForm] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [newAgent, setNewAgent] = useState({ email: '', name: '', password: '' });
 
   useEffect(() => {
     api.getSettings().then((s) => {
@@ -35,13 +31,8 @@ export default function SettingsPage() {
         zoho_notify_on_escalation: s.settings.zoho_notify_on_escalation || 'true',
         escalation_notify_email: s.settings.escalation_notify_email || 'tech@nationwideadvance.com',
       });
-
-
     });
-    if (agent?.role === 'admin') {
-      api.getAgents().then(setAgents).catch(() => {});
-    }
-  }, [agent?.role]);
+  }, []);
 
   const handleSave = async () => {
     setSaving(true);
@@ -58,14 +49,6 @@ export default function SettingsPage() {
     } finally {
       setSaving(false);
     }
-  };
-
-  const handleCreateAgent = async () => {
-    if (!newAgent.email || !newAgent.name || !newAgent.password) return;
-    await api.createAgent(newAgent);
-    setNewAgent({ email: '', name: '', password: '' });
-    const list = await api.getAgents();
-    setAgents(list);
   };
 
   const update = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
@@ -117,17 +100,17 @@ export default function SettingsPage() {
             </p>
           </div>
           <div>
-            <p className="font-medium text-luxury-900">Can agents take over conversations?</p>
+            <p className="font-medium text-luxury-900">Can I take over conversations?</p>
             <p className="text-luxury-500 mt-1">
-              Yes. Each agent logs into this dashboard. Click <strong className="text-luxury-700">Take Over</strong> to pause AI
+              Yes. This v1 dashboard is single-user (Keith). Click <strong className="text-luxury-700">Take Over</strong> to pause AI
               and reply manually. Click <strong className="text-luxury-700">Resume AI</strong> to hand back to the bot.
+              Extra team logins can be added later when approved.
             </p>
           </div>
           <div>
-            <p className="font-medium text-luxury-900">Multi-organization support?</p>
+            <p className="font-medium text-luxury-900">Multi-user / team agents?</p>
             <p className="text-luxury-500 mt-1">
-              This deployment supports a single organization with multiple agent logins.
-              Separate organization isolation is not included in the current version.
+              Not in this version. One login for Keith only. Team agent accounts are deferred until you give the go-ahead.
             </p>
           </div>
         </div>
@@ -289,32 +272,6 @@ export default function SettingsPage() {
           </label>
         </div>
       </div>
-
-      {agent?.role === 'admin' && (
-        <div className="card p-5 space-y-4">
-          <h3 className="font-semibold flex items-center gap-2">
-            <Users className="w-5 h-5 text-gold-600" />
-            Team Agents
-          </h3>
-          <p className="text-sm text-luxury-500">Add sales agents who can log in and take over conversations.</p>
-          {agents.length > 0 && (
-            <ul className="divide-y divide-luxury-150 text-sm">
-              {agents.map((a) => (
-                <li key={a.id} className="py-2 flex justify-between">
-                  <span>{a.name} <span className="text-luxury-400">({a.email})</span></span>
-                  <span className="text-xs text-luxury-400 capitalize">{a.role}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="grid sm:grid-cols-3 gap-3">
-            <input className="input" placeholder="Email" value={newAgent.email} onChange={(e) => setNewAgent((a) => ({ ...a, email: e.target.value }))} />
-            <input className="input" placeholder="Name" value={newAgent.name} onChange={(e) => setNewAgent((a) => ({ ...a, name: e.target.value }))} />
-            <input className="input" type="password" placeholder="Password" value={newAgent.password} onChange={(e) => setNewAgent((a) => ({ ...a, password: e.target.value }))} />
-          </div>
-          <button onClick={handleCreateAgent} className="btn-secondary text-sm">Add Agent</button>
-        </div>
-      )}
 
       <button onClick={handleSave} disabled={saving} className="btn-primary flex items-center gap-2">
         <Save className="w-4 h-4" />

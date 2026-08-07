@@ -28,7 +28,7 @@ import {
   isIbluSendConfigured,
   verifyIbluSendSignature,
 } from '../services/iblusend.js';
-import { verifyPassword, signToken, getAllAgents, createAgent } from '../services/auth.js';
+import { verifyPassword, signToken, getAllAgents } from '../services/auth.js';
 import { authMiddleware, AuthRequest } from '../middleware/auth.js';
 import {
   getAllNotifications,
@@ -326,16 +326,11 @@ router.get('/agents', (_req, res) => {
   res.json(getAllAgents());
 });
 
-router.post('/agents', async (req: AuthRequest, res) => {
-  if (req.agent?.role !== 'admin') return res.status(403).json({ error: 'Admin only' });
-  const { email, name, password, role } = req.body;
-  if (!email || !name || !password) return res.status(400).json({ error: 'email, name, password required' });
-  try {
-    const agent = await createAgent(email, name, password, role || 'agent');
-    res.json(agent);
-  } catch (error) {
-    res.status(500).json({ error: error instanceof Error ? error.message : 'Failed' });
-  }
+router.post('/agents', (_req: AuthRequest, res) => {
+  // v1 is single-user (Keith only). Team agent accounts stay disabled until approved.
+  return res.status(403).json({
+    error: 'Multi-user agents are disabled in v1. Single login only until client approves team access.',
+  });
 });
 
 router.get('/settings', (_req, res) => {

@@ -1,7 +1,7 @@
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, BarChart3, Settings, Radio,
-  Bot, LogOut, User, Users, FileArchive,
+  LogOut, User, Users, FileArchive,
 } from 'lucide-react';
 
 import Dashboard from './pages/Dashboard';
@@ -41,8 +41,8 @@ function AppShell() {
       <aside className="w-64 bg-luxury-sidebar border-r border-luxury-200 flex flex-col shrink-0 shadow-luxury">
         <div className="p-5 border-b border-luxury-200">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gold-shine flex items-center justify-center shadow-gold">
-              <Bot className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-luxury ring-1 ring-luxury-200 bg-white shrink-0">
+              <img src="/favicon.svg?v=4" alt="" className="w-full h-full object-cover" />
             </div>
             <div>
               <h1 className="font-display font-semibold text-lg leading-tight text-luxury-900">SMS Agent</h1>
