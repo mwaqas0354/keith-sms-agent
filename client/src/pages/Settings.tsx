@@ -88,9 +88,9 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-luxury-900">Who trains the bot?</p>
             <p className="text-luxury-500 mt-1">
-              You (Keith) train the bot via <strong className="text-luxury-700">Bot Training</strong> below —
+              Nationwide Tech Admin trains the bot via <strong className="text-luxury-700">Bot Training</strong> below —
               no coding required. Edit the system prompt, opener, upload link, and product notes anytime.
-              Changes apply on the next AI reply. This is prompt engineering on your Nationwide Advance account, not model fine-tuning.
+              Changes apply on the next AI reply. This is prompt engineering on the Nationwide Advance account, not model fine-tuning.
             </p>
           </div>
           <div>
@@ -103,7 +103,7 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-luxury-900">Can I take over conversations?</p>
             <p className="text-luxury-500 mt-1">
-              Yes. This v1 dashboard is single-user (Keith). Click <strong className="text-luxury-700">Take Over</strong> to pause AI
+              Yes. This v1 dashboard is single-user (Nationwide Tech Admin). Click <strong className="text-luxury-700">Take Over</strong> to pause AI
               and reply manually. Click <strong className="text-luxury-700">Resume AI</strong> to hand back to the bot.
               Extra team logins can be added later when approved.
             </p>
@@ -111,7 +111,7 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-luxury-900">Multi-user / team agents?</p>
             <p className="text-luxury-500 mt-1">
-              Not in this version. One login for Keith only. Team agent accounts are deferred until you give the go-ahead.
+              Not in this version. One Nationwide Tech Admin login only. Team agent accounts are deferred until approved.
             </p>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function SettingsPage() {
           Bot Training
         </h3>
         <p className="text-sm text-luxury-500">
-          Keith&apos;s sales script lives here. Login anytime, tweak the opener / objections / rules, hit Save —
+          Nationwide sales script lives here. Login anytime, tweak the opener / objections / rules, hit Save —
           the next AI reply uses your updates. Leads are pre-qualified on the form; AI should push app + 4-month bank statements.
         </p>
         <div>

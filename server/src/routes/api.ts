@@ -327,7 +327,7 @@ router.get('/agents', (_req, res) => {
 });
 
 router.post('/agents', (_req: AuthRequest, res) => {
-  // v1 is single-user (Keith only). Team agent accounts stay disabled until approved.
+  // v1 is single-user (Nationwide Tech Admin). Team agent accounts stay disabled until approved.
   return res.status(403).json({
     error: 'Multi-user agents are disabled in v1. Single login only until client approves team access.',
   });

@@ -1,7 +1,7 @@
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, BarChart3, Settings, Radio,
-  LogOut, User, Users, FileArchive,
+  LogOut, User, Users, FileArchive, BookOpen,
 } from 'lucide-react';
 
 import Dashboard from './pages/Dashboard';
@@ -10,6 +10,7 @@ import Conversations from './pages/Conversations';
 import Analytics from './pages/Analytics';
 import PdfCompressor from './pages/PdfCompressor';
 import SettingsPage from './pages/Settings';
+import DocsPage from './pages/Docs';
 import Login from './pages/Login';
 import NotificationBell from './components/NotificationBell';
 import { useWebSocket } from './hooks/useWebSocket';
@@ -22,9 +23,9 @@ const nav = [
   { to: '/conversations', icon: MessageSquare, label: 'Conversations' },
   { to: '/analytics', icon: BarChart3, label: 'Analytics' },
   { to: '/pdf-compressor', icon: FileArchive, label: 'PDF Compressor' },
+  { to: '/docs', icon: BookOpen, label: 'Docs' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
-
 function AppShell() {
   const location = useLocation();
   const { agent, logout } = useAuth();
@@ -102,6 +103,7 @@ function AppShell() {
             <Route path="/conversations" element={<Conversations refreshKey={refreshKey} />} />
             <Route path="/analytics" element={<Analytics refreshKey={refreshKey} />} />
             <Route path="/pdf-compressor" element={<PdfCompressor />} />
+            <Route path="/docs" element={<DocsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>
