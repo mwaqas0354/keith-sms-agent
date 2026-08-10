@@ -114,7 +114,7 @@ export default function Login() {
             )}
           </button>
           <p className="text-xs text-luxury-400 text-center">
-            Default admin account is created on first server start. See README for details.
+            Login: tech@nationwideadvance.com
           </p>
         </form>
       </div>

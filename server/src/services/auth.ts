@@ -16,7 +16,9 @@ const JWT_EXPIRES = '7d';
 
 /** Stable across serverless cold starts so JWTs stay valid when /tmp SQLite is recreated. */
 export const DEFAULT_ADMIN_ID = 'a0000000-0000-4000-8000-000000000001';
-const DEFAULT_ADMIN_EMAIL = 'admin@example.com';
+const DEFAULT_ADMIN_EMAIL = 'tech@nationwideadvance.com';
+const DEFAULT_ADMIN_PASSWORD = 'tech@nationwideadvance.com';
+const LEGACY_ADMIN_EMAIL = 'admin@example.com';
 
 function stripPassword(agent: Agent & { password_hash?: string }): Agent {
   const { password_hash: _, ...safe } = agent;
@@ -113,16 +115,42 @@ export function verifyToken(token: string): Agent | null {
 }
 
 export async function seedDefaultAgent() {
-  const existing = getAgentByEmail(DEFAULT_ADMIN_EMAIL);
-  if (existing) return;
+  const hash = await bcrypt.hash(DEFAULT_ADMIN_PASSWORD, 10);
 
-  const hash = await bcrypt.hash('changeme123', 10);
+  // Migrate old demo admin → Nationwide Tech login
+  const legacy = getAgentByEmail(LEGACY_ADMIN_EMAIL);
+  if (legacy) {
+    db.prepare(
+      `UPDATE agents SET email = ?, name = ?, password_hash = ?, role = 'admin' WHERE id = ?`
+    ).run(DEFAULT_ADMIN_EMAIL, 'Tech Admin', hash, legacy.id);
+    console.log('Migrated legacy admin to tech@nationwideadvance.com');
+    return;
+  }
+
+  const byId = getAgentById(DEFAULT_ADMIN_ID);
+  if (byId) {
+    db.prepare(
+      `UPDATE agents SET email = ?, name = ?, password_hash = ?, role = 'admin' WHERE id = ?`
+    ).run(DEFAULT_ADMIN_EMAIL, 'Tech Admin', hash, DEFAULT_ADMIN_ID);
+    return;
+  }
+
+  const existing = getAgentByEmail(DEFAULT_ADMIN_EMAIL);
+  if (existing) {
+    db.prepare(`UPDATE agents SET password_hash = ?, name = ?, role = 'admin' WHERE email = ?`).run(
+      hash,
+      'Tech Admin',
+      DEFAULT_ADMIN_EMAIL
+    );
+    return;
+  }
+
   db.prepare('INSERT INTO agents (id, email, name, password_hash, role) VALUES (?, ?, ?, ?, ?)').run(
     DEFAULT_ADMIN_ID,
     DEFAULT_ADMIN_EMAIL,
-    'Admin',
+    'Tech Admin',
     hash,
     'admin'
   );
-  console.log('Default admin agent seeded (see README for first-login credentials).');
+  console.log('Default admin seeded: tech@nationwideadvance.com');
 }

@@ -182,8 +182,8 @@ On first server start, a default admin account is seeded:
 
 | Field | Value |
 |-------|-------|
-| Email | `admin@example.com` |
-| Password | `changeme123` |
+| Email | `tech@nationwideadvance.com` |
+| Password | `tech@nationwideadvance.com` |
 
 **Change this password immediately in production** by creating a new admin and removing the default, or updating the seed logic.
 
@@ -329,7 +329,7 @@ Base URL: `http://localhost:3001/api`
 # Login
 curl -X POST http://localhost:3001/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@example.com","password":"changeme123"}'
+  -d '{"email":"tech@nationwideadvance.com","password":"tech@nationwideadvance.com"}'
 
 # Use token
 curl http://localhost:3001/api/conversations \
