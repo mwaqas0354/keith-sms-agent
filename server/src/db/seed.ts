@@ -290,6 +290,13 @@ export function seedDatabase() {
   }
   if (!getSetting('agent_name')) setSetting('agent_name', 'Admin');
   if (!getSetting('bot_company_name')) setSetting('bot_company_name', 'Nationwide Advance');
+  // Keith's live training defaults (prompt/outreach come from ai.ts when unset)
+  if (!getSetting('bot_outreach_template')) {
+    setSetting(
+      'bot_outreach_template',
+      'Hey {firstName}, Thank you for applying and trusting us with your business financing needs. I saw you were seeking {fundingNeed}. Are you ready to move forward with the application and your recent 4-month bank statements?'
+    );
+  }
   setSetting('seed_version', SEED_VERSION);
 
 

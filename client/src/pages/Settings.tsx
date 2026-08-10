@@ -27,6 +27,7 @@ export default function SettingsPage() {
         bot_products_catalog: s.settings.bot_products_catalog || '',
         bot_company_name: s.settings.bot_company_name || 'Nationwide Advance',
         bot_outreach_template: s.settings.bot_outreach_template || '',
+        bot_upload_link: s.settings.bot_upload_link || '',
         zoho_notify_on_conversation: s.settings.zoho_notify_on_conversation || 'true',
         zoho_notify_on_escalation: s.settings.zoho_notify_on_escalation || 'true',
         escalation_notify_email: s.settings.escalation_notify_email || 'tech@nationwideadvance.com',
@@ -87,9 +88,9 @@ export default function SettingsPage() {
           <div>
             <p className="font-medium text-luxury-900">Who trains the bot?</p>
             <p className="text-luxury-500 mt-1">
-              Administrators train the bot via the <strong className="text-luxury-700">Bot Training</strong> section below —
-              no coding required. Edit the system prompt, product catalog, company info, and outreach templates.
-              This is prompt engineering, not model fine-tuning.
+              You (Keith) train the bot via <strong className="text-luxury-700">Bot Training</strong> below —
+              no coding required. Edit the system prompt, opener, upload link, and product notes anytime.
+              Changes apply on the next AI reply. This is prompt engineering on your Nationwide Advance account, not model fine-tuning.
             </p>
           </div>
           <div>
@@ -153,23 +154,41 @@ export default function SettingsPage() {
           Bot Training
         </h3>
         <p className="text-sm text-luxury-500">
-          Configure how the AI agent talks to leads. Changes apply to new AI responses immediately.
+          Keith&apos;s sales script lives here. Login anytime, tweak the opener / objections / rules, hit Save —
+          the next AI reply uses your updates. Leads are pre-qualified on the form; AI should push app + 4-month bank statements.
         </p>
         <div>
           <label className="block text-sm text-luxury-500 mb-1">Company Name</label>
-          <input className="input" value={form.bot_company_name} onChange={(e) => update('bot_company_name', e.target.value)} placeholder="Your Company" />
+          <input className="input" value={form.bot_company_name} onChange={(e) => update('bot_company_name', e.target.value)} placeholder="Nationwide Advance" />
         </div>
         <div>
-          <label className="block text-sm text-luxury-500 mb-1">Products / Services Catalog</label>
-          <textarea className="input min-h-[80px]" value={form.bot_products_catalog} onChange={(e) => update('bot_products_catalog', e.target.value)} placeholder="List your products, pricing, features..." />
+          <label className="block text-sm text-luxury-500 mb-1">Secure Upload Link (application + 4-month bank statements)</label>
+          <input
+            className="input"
+            value={form.bot_upload_link}
+            onChange={(e) => update('bot_upload_link', e.target.value)}
+            placeholder="https://..."
+          />
+          <p className="text-xs text-luxury-400 mt-1">AI will text this link when the lead is ready to send docs.</p>
         </div>
         <div>
-          <label className="block text-sm text-luxury-500 mb-1">System Prompt (Bot Personality & Rules)</label>
-          <textarea className="input min-h-[120px] font-mono text-xs" value={form.bot_system_prompt} onChange={(e) => update('bot_system_prompt', e.target.value)} />
+          <label className="block text-sm text-luxury-500 mb-1">Products / Services Notes (optional)</label>
+          <textarea className="input min-h-[80px]" value={form.bot_products_catalog} onChange={(e) => update('bot_products_catalog', e.target.value)} placeholder="Extra product notes the AI can reference..." />
         </div>
         <div>
-          <label className="block text-sm text-luxury-500 mb-1">Outreach Template (use {'{name}'} for lead name)</label>
-          <textarea className="input min-h-[60px]" value={form.bot_outreach_template} onChange={(e) => update('bot_outreach_template', e.target.value)} placeholder="Hi {name}! I'm reaching out from..." />
+          <label className="block text-sm text-luxury-500 mb-1">System Prompt (personality, objections, never-say rules)</label>
+          <textarea className="input min-h-[160px] font-mono text-xs" value={form.bot_system_prompt} onChange={(e) => update('bot_system_prompt', e.target.value)} />
+        </div>
+        <div>
+          <label className="block text-sm text-luxury-500 mb-1">
+            Outreach Opener (use {'{firstName}'}, {'{name}'}, {'{fundingNeed}'})
+          </label>
+          <textarea
+            className="input min-h-[80px]"
+            value={form.bot_outreach_template}
+            onChange={(e) => update('bot_outreach_template', e.target.value)}
+            placeholder="Hey {firstName}, Thank you for applying..."
+          />
         </div>
       </div>
 

@@ -36,7 +36,7 @@ import {
   markNotificationRead,
   markAllNotificationsRead,
 } from '../services/notifications.js';
-import { getSystemPrompt } from '../services/ai.js';
+import { getSystemPrompt, getDefaultSystemPrompt, DEFAULT_OUTREACH_TEMPLATE } from '../services/ai.js';
 import { getLastEscalationEmail } from '../services/email.js';
 
 
@@ -338,7 +338,8 @@ router.get('/settings', (_req, res) => {
     'openai_api_key', 'openai_model', 'iblusend_api_key', 'iblusend_webhook_secret',
     'iblusend_device_id', 'zoho_client_id', 'zoho_client_secret', 'zoho_refresh_token',
     'zoho_webhook_secret', 'demo_mode', 'bot_system_prompt', 'bot_products_catalog',
-    'bot_company_name', 'bot_outreach_template', 'zoho_notify_on_conversation', 'zoho_notify_on_escalation',
+    'bot_company_name', 'bot_outreach_template', 'bot_upload_link',
+    'zoho_notify_on_conversation', 'zoho_notify_on_escalation',
     'escalation_notify_email',
   ];
   const settings: Record<string, string> = {};
@@ -355,10 +356,16 @@ router.get('/settings', (_req, res) => {
     }
   }
   if (!settings.bot_system_prompt) {
-    settings.bot_system_prompt = getSystemPrompt();
+    settings.bot_system_prompt = getDefaultSystemPrompt();
   }
   if (!settings.bot_company_name) {
     settings.bot_company_name = 'Nationwide Advance';
+  }
+  if (!settings.bot_outreach_template) {
+    settings.bot_outreach_template = DEFAULT_OUTREACH_TEMPLATE;
+  }
+  if (!settings.bot_upload_link) {
+    settings.bot_upload_link = '';
   }
   if (!settings.escalation_notify_email) {
     settings.escalation_notify_email =
@@ -384,7 +391,7 @@ router.put('/settings', (req, res) => {
     'openai_api_key', 'openai_model', 'iblusend_api_key', 'iblusend_webhook_secret',
     'iblusend_device_id', 'zoho_client_id', 'zoho_client_secret', 'zoho_refresh_token',
     'zoho_api_domain', 'zoho_webhook_secret', 'demo_mode', 'bot_system_prompt',
-    'bot_products_catalog', 'bot_company_name', 'bot_outreach_template',
+    'bot_products_catalog', 'bot_company_name', 'bot_outreach_template', 'bot_upload_link',
     'zoho_notify_on_conversation', 'zoho_notify_on_escalation', 'escalation_notify_email',
   ];
 
